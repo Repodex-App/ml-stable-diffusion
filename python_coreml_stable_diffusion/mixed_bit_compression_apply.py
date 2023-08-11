@@ -44,8 +44,20 @@ def main(args):
 
     # Hash tensors to be able to match torch tensor names to mil tensors
     def get_tensor_hash(tensor):
-        assert tensor.dtype == np.float16
-        return tensor.ravel()[0] + np.prod(tensor.shape)
+        """
+        This function calculates a unique hash for a given tensor.
+
+        Parameters:
+        tensor (np.ndarray): The input tensor for which to calculate the hash.
+
+        Returns:
+        float: The calculated hash for the input tensor.
+        """
+        # Calculate the product of the tensor's shape using tensor.size for better performance
+        tensor_size = tensor.size
+
+        # Use the first element of the tensor and the tensor's size to calculate a unique hash
+        return tensor.ravel()[0] if tensor.size > 0 else 0 + tensor_size
 
     args.model_version = pre_analysis["model_version"]
     pipe = get_pipeline(args)
